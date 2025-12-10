@@ -10,3 +10,14 @@ const colors = {
   blue: "#1542b4",
   dark: "#07001c",
 };
+
+export const FONTS = {
+  MerriweatherLightIt: "Merriweather-LightIt",
+  MerriweatherLight: "Merriweather Light",
+  MerriweatherRegular: "Merriweather-Regular",
+  MerriweatherItalic: "Merriweather-Italic",
+  MerriweatherBold: "Merriweather-Bold",
+  MerriweatherBoldIt: "Merriweather-BoldIt",
+  MerriweatherUltraBold: "Merriweather UltraBold",
+  MerriweatherUltraBdIt: "Merriweather-UltraBdIt",
+};

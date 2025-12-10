@@ -26,55 +26,6 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
-      [
-        "expo-font",
-        {
-            "fonts": [
-              {
-                "fontFamily": "Merriweather",
-                "fontDefinitions": [
-                  {
-                    "path": "./assets/fonts/Merriweather-LightIt.ttf",
-                    "weight": 300,
-                    "style": "italic"
-                  },
-                  {
-                    "path": "./assets/fonts/Merriweather Light.ttf",
-                    "weight": 300
-                  },
-                  {
-                    "path": "./assets/fonts/Merriweather-Regular.ttf",
-                    "weight": 400
-                  },
-                  {
-                    "path": "./assets/fonts/Merriweather-Italic.ttf",
-                    "weight": 400,
-                    "style": "italic"
-                  },
-                  {
-                    "path": "./assets/fonts/Merriweather-Bold.ttf",
-                    "weight": 700,
-                  },
-                  {
-                    "path": "./assets/fonts/Merriweather-BoldIt.ttf",
-                    "weight": 700,
-                    "style": "italic"
-                  },
-                  {
-                    "path": "./assets/fonts/Merriweather UltraBold.ttf",
-                    "weight": 800,
-                  },
-                  {
-                    "path": "./assets/fonts/Merriweather-UltraBdIt.ttf",
-                    "weight": 800,
-                    "style": "italic"
-                  }
-                  
-                ]
-              }
-            ]
-        }
-      ],
       "expo-router",
       [
         "expo-splash-screen",

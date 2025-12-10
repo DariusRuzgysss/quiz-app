@@ -4,6 +4,7 @@
     "strict": true,
     "paths": {
       "@components": ["./app/components"],
+      "@hooks/*": ["./app/hooks/*"],
       "@utils/*": ["./app/utils/*"],
       "@assets": ["./assets"],
     }

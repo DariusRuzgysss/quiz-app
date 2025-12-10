@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   text: {
-    fontFamily: "Merriweather",
+    fontFamily: "Merriweather-Regular",
     fontWeight: "400",
   },
 });
