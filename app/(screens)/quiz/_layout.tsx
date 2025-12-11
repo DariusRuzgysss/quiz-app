@@ -25,6 +25,7 @@ const QuizLayout = () => {
     <>
       <CustomHeader
         onBackPress={onBackPress}
+        style={{ paddingBottom: 50 }}
         component={
           <AnimatedSteppe
             totalPage={questionsCount + 1} // + 1 because of summary screen

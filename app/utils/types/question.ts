@@ -9,10 +9,10 @@ export type Question = {
   title: string;
   type: QuestionType;
   visibleIf?: VisibleIf;
-  options?: Option[];
+  options?: OptionItem[];
 };
 
-type Option = {
+export type OptionItem = {
   title: string;
   value: string;
 };

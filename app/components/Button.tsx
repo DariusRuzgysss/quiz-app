@@ -42,7 +42,7 @@ export default memo(
           style,
         ])}
       >
-        {gradientColors && (
+        {!disabled && gradientColors && (
           <LinearGradient
             colors={gradientColors}
             style={StyleSheet.absoluteFill}

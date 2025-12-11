@@ -1,15 +1,22 @@
 import React, { memo } from "react";
-import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
+import {
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  ViewStyle,
+} from "react-native";
 
 type Props = {
   component: React.ReactNode;
   onBackPress: () => void;
+  style?: ViewStyle;
 };
 
-export default memo(({ onBackPress, component }: Props) => {
+export default memo(({ onBackPress, style, component }: Props) => {
   return (
-    <View style={styles.container}>
-      <TouchableOpacity onPress={onBackPress}>
+    <View style={[styles.container, style]}>
+      <TouchableOpacity hitSlop={20} onPress={onBackPress}>
         <Image
           source={require("../../assets/images/arrow back.png")}
           style={styles.image}

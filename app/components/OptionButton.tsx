@@ -1,6 +1,6 @@
 import { AnimatedCheckbox } from "@components";
 import { colors, FONTS } from "@utils/constants";
-import React, { memo } from "react";
+import React, { memo, useEffect } from "react";
 import {
   StyleProp,
   StyleSheet,
@@ -10,6 +10,12 @@ import {
   View,
   ViewStyle,
 } from "react-native";
+import Animated, {
+  interpolateColor,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
 
 type Props = {
   title: string;
@@ -20,27 +26,40 @@ type Props = {
   textStyle?: TextStyle;
 };
 
+const AnimatedTouchable = Animated.createAnimatedComponent(TouchableOpacity);
+
 export default memo(
   ({ style, selected, isMultiple, onPress, textStyle, title }: Props) => {
+    const progress = useSharedValue(0);
+
+    useEffect(() => {
+      progress.value = withTiming(selected ? 1 : 0, { duration: 250 });
+    }, [progress, selected]);
+
+    const animatedStyle = useAnimatedStyle(() => {
+      return {
+        backgroundColor: interpolateColor(
+          progress.value,
+          [0, 1],
+          ["transparent", colors.blueSemiTransparent]
+        ),
+        borderColor: interpolateColor(
+          progress.value,
+          [0, 1],
+          [colors.border, "#fff"]
+        ),
+      };
+    });
     return (
-      <TouchableOpacity
+      <AnimatedTouchable
         onPress={onPress}
-        style={StyleSheet.flatten([
-          styles.base,
-          {
-            backgroundColor: selected
-              ? colors.blueSemiTransparent
-              : "transparent",
-            borderColor: selected ? colors.white : colors.border,
-          },
-          style,
-        ])}
+        style={[styles.base, animatedStyle, style]}
       >
         <View style={styles.textContainer}>
           <Text style={[styles.text, textStyle]}>{title}</Text>
           {isMultiple && <AnimatedCheckbox selected={selected ?? false} />}
         </View>
-      </TouchableOpacity>
+      </AnimatedTouchable>
     );
   }
 );
