@@ -1,14 +1,15 @@
-const colors = {
+export const colors = {
   darkPurple: "#6C42FF",
-  purple: "rgba(188,177,255,1)",
+  purple: "#BCB1FF",
   lightBlue: "#469ED4",
   aqua: "#34cbbf",
-  aqua2: "#34cbb1",
   border: "rgba(74,72,132, 0.5)",
+  blueSemiTransparent: "rgba(51,50,91,0.4)",
   white: "#FDFCFE",
   darkBlue: "#33325b",
   blue: "#1542b4",
   dark: "#07001c",
+  black: "#000000",
 };
 
 export const FONTS = {
@@ -20,4 +21,20 @@ export const FONTS = {
   MerriweatherBoldIt: "Merriweather-BoldIt",
   MerriweatherUltraBold: "Merriweather UltraBold",
   MerriweatherUltraBdIt: "Merriweather-UltraBdIt",
+  //RedditSans
+  RedditSansBlack: "RedditSans-Black",
+  RedditSansBlackItalic: "RedditSans-BlackItalic",
+  RedditSansBold: "RedditSans-Bold",
+  RedditSansBoldItalic: "RedditSans-BoldItalic",
+  RedditSansExtraBold: "RedditSans-ExtraBold",
+  RedditSansExtraLight: "RedditSans-ExtraLight",
+  RedditSansExtraLightItalic: "RedditSans-ExtraLightItalic",
+  RedditSansItalic: "RedditSans-Italic",
+  RedditSansLight: "RedditSans-Light",
+  RedditSansLightItalic: "RedditSans-LightItalic",
+  RedditSansMedium: "RedditSans-Medium",
+  RedditSansMediumItalic: "RedditSans-MediumItalic",
+  RedditSansRegular: "RedditSans-Regular",
+  RedditSansSemiBold: "RedditSans-SemiBold",
+  RedditSansSemiBoldItalic: "RedditSans-SemiBoldItalic",
 };

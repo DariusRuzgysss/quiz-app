@@ -6,5 +6,5 @@ export const getQuizList = async (): Promise<QuestionResponse> => {
   if (res.status !== 200) {
     throw new Error("Failed to fetch questions");
   }
-  return res.data;
+  return res.data.data;
 };

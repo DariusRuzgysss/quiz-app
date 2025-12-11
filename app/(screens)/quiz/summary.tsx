@@ -2,7 +2,7 @@ import React from "react";
 import { Text } from "react-native";
 
 const SummaryScreen = () => {
-  return <Text>SummaryScreen</Text>;
+  return <Text style={{ color: "#fff" }}>SummaryScreen</Text>;
 };
 
 export default SummaryScreen;
