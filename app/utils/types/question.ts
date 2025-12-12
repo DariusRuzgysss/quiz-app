@@ -17,7 +17,7 @@ export type OptionItem = {
   value: string;
 };
 
-type QuestionType =
+export type QuestionType =
   | "single"
   | "multiple"
   | "weight"

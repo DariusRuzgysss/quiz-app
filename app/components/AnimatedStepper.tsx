@@ -7,14 +7,14 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 
-interface StepperProps {
+type StepperProps = {
   currentPage: number;
   totalPage: number;
   barHeight?: number;
   activeColor?: string;
   inactiveColor?: string;
   duration?: number;
-}
+};
 
 const AnimatedStepper: React.FC<StepperProps> = ({
   currentPage,

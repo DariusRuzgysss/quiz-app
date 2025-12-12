@@ -8,7 +8,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 
-interface AnimatedCheckboxProps {
+type AnimatedCheckboxProps = {
   selected: boolean;
   onPress?: () => void;
   size?: number;
@@ -16,7 +16,7 @@ interface AnimatedCheckboxProps {
     active: string;
     inactive: string;
   };
-}
+};
 
 const AnimatedCheckbox: React.FC<AnimatedCheckboxProps> = ({
   selected,

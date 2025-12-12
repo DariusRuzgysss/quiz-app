@@ -9,10 +9,10 @@ const QuizLayout = () => {
 
   const onBackPress = () => {
     setCurrentQuizPage(
-      currentQuizPage === 1 ? currentQuizPage : currentQuizPage - 1
+      currentQuizPage === 0 ? currentQuizPage : currentQuizPage - 1
     );
     router.push(
-      currentQuizPage === 1
+      currentQuizPage === 0
         ? "/(screens)"
         : {
             pathname: "/quiz/[id]",

@@ -1,12 +1,14 @@
-import { Button, OptionsList } from "@components";
+import { Button, CredentialsForm, NameForm, OptionsList } from "@components";
 import useStore from "@hooks/useStore";
 import { colors, FONTS } from "@utils/constants";
+import { AnswerItem } from "@utils/types/answer";
 import { router, useLocalSearchParams } from "expo-router";
 import React, { useCallback } from "react";
+import { FieldValues } from "react-hook-form";
 import { StyleSheet, Text, View } from "react-native";
 
 const QuizScreen = () => {
-  const { questions, questionsCount, setCurrentQuizPage, setAnswer } =
+  const { questions, answers, questionsCount, setCurrentQuizPage, setAnswer } =
     useStore();
   const { id } = useLocalSearchParams();
   const currentQuestion = questions[+id];
@@ -26,10 +28,14 @@ const QuizScreen = () => {
   }, [id, questionsCount, setCurrentQuizPage]);
 
   const onSelect = useCallback(
-    (key: string, value: string) => {
-      setAnswer(key, value);
-      if (currentQuestion.type === "single") {
-        onPressNext();
+    (key: string, value: AnswerItem) => {
+      setAnswer(key, value, currentQuestion.type);
+      if (
+        currentQuestion.type === "single" ||
+        currentQuestion.type === "name" ||
+        currentQuestion.type === "credentials"
+      ) {
+        setTimeout(() => onPressNext(), 700);
       }
     },
     [currentQuestion.type, onPressNext, setAnswer]
@@ -39,11 +45,35 @@ const QuizScreen = () => {
     switch (currentQuestion.type) {
       case "single":
       case "multiple":
-        return <OptionsList question={currentQuestion} onPress={onSelect} />;
+        return (
+          <OptionsList
+            question={currentQuestion}
+            selected={answers?.[currentQuestion.key]}
+            onPress={onSelect}
+            onPressNext={onPressNext}
+          />
+        );
+      case "name":
+        return (
+          <NameForm
+            value={answers[currentQuestion.key]?.name}
+            onSubmit={(data: FieldValues) =>
+              onSelect(currentQuestion.key, data)
+            }
+          />
+        );
+      case "credentials":
+        return (
+          <CredentialsForm
+            value={answers[currentQuestion.key]}
+            onSubmit={(data: FieldValues) =>
+              onSelect(currentQuestion.key, data)
+            }
+          />
+        );
       default:
     }
-  }, [currentQuestion, onSelect]);
-  console.log(currentQuestion);
+  }, [answers, currentQuestion, onPressNext, onSelect]);
 
   return (
     <View style={styles.container}>
@@ -69,8 +99,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  textContainer: {
+  content: {
     flex: 1,
+  },
+  textContainer: {
     gap: 10,
     marginBottom: 24,
   },

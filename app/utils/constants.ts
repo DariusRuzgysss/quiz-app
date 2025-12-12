@@ -9,7 +9,8 @@ export const colors = {
   darkBlue: "#33325b",
   blue: "#1542b4",
   dark: "#07001c",
-  black: "#000000",
+  black: "#05011b",
+  inputText: "#BEC4D2",
 };
 
 export const FONTS = {

@@ -1,12 +1,37 @@
 import { Button } from "@components";
 import useStore from "@hooks/useStore";
 import { colors, FONTS } from "@utils/constants";
-import React from "react";
+import { getAnswerTitles } from "@utils/helper";
+import React, { useCallback } from "react";
 import { StyleSheet, Text, View } from "react-native";
 
 const SummaryScreen = () => {
-  const { answers } = useStore();
+  const { answers, questions } = useStore();
   const onPressStart = () => {};
+  const answerGoal = answers["goal"];
+  const answerOtherGoals = answers["other_goals"];
+  const goalKey: string[] = Array.isArray(answerGoal) ? answerGoal : answerGoal;
+  const otherGoalKeys: string[] = Array.isArray(answerOtherGoals)
+    ? answerOtherGoals
+    : answerOtherGoals;
+
+  const goalTitle = useCallback(() => {
+    const goal = questions.find((q) => q.key === "goal");
+    const titles = getAnswerTitles(goalKey, goal);
+    return titles?.map((t) => (
+      <Text
+        key={t.value}
+        style={[styles.subTitle, { fontFamily: FONTS.MerriweatherBold }]}
+      >
+        {t.title}
+      </Text>
+    ));
+  }, [goalKey, questions]);
+
+  const otherGoalTitles = useCallback(() => {
+    const otherGoal = questions.find((q) => q.key === "other_goals");
+    return getAnswerTitles(otherGoalKeys, otherGoal);
+  }, [otherGoalKeys, questions]);
 
   return (
     <View style={styles.container}>
@@ -25,7 +50,7 @@ const SummaryScreen = () => {
             <Text
               style={[styles.subTitle, { fontFamily: FONTS.MerriweatherBold }]}
             >
-              Improve my health
+              {goalTitle()}
             </Text>
           </View>
           <View style={styles.textContainer}>
