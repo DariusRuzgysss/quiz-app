@@ -1,5 +1,5 @@
 import { colors } from "@utils/constants";
-import React from "react";
+import React, { useEffect } from "react";
 import { StyleSheet, View } from "react-native";
 import Animated, {
   useAnimatedStyle,
@@ -26,7 +26,7 @@ const AnimatedStepper: React.FC<StepperProps> = ({
 }) => {
   const progress = useSharedValue(0);
 
-  React.useEffect(() => {
+  useEffect(() => {
     progress.value = withTiming(currentPage / totalPage, { duration });
   }, [currentPage, duration, progress, totalPage]);
 
