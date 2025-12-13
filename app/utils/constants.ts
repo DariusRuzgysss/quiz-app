@@ -4,13 +4,14 @@ export const colors = {
   lightBlue: "#469ED4",
   aqua: "#34cbbf",
   border: "rgba(74,72,132, 0.5)",
-  blueSemiTransparent: "rgba(51,50,91,0.4)",
+  blueSemiTransparent: "#171534",
   white: "#FDFCFE",
   darkBlue: "#33325b",
   blue: "#1542b4",
   dark: "#07001c",
   black: "#05011b",
   inputText: "#BEC4D2",
+  error: "#FF6B6B",
 };
 
 export const FONTS = {

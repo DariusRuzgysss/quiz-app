@@ -1,5 +1,6 @@
 import { AnimatedCheckbox } from "@components";
 import { colors, FONTS } from "@utils/constants";
+import { LinearGradient } from "expo-linear-gradient";
 import React, { memo, useEffect } from "react";
 import {
   StyleProp,
@@ -26,14 +27,14 @@ type Props = {
   textStyle?: TextStyle;
 };
 
-const AnimatedTouchable = Animated.createAnimatedComponent(TouchableOpacity);
+const AnimatedInnerView = Animated.createAnimatedComponent(View);
 
 export default memo(
   ({ style, selected, isMultiple, onPress, textStyle, title }: Props) => {
     const progress = useSharedValue(0);
 
     useEffect(() => {
-      progress.value = withTiming(selected ? 1 : 0, { duration: 250 });
+      progress.value = withTiming(selected ? 1 : 0, { duration: 350 });
     }, [progress, selected]);
 
     const animatedStyle = useAnimatedStyle(() => {
@@ -41,25 +42,29 @@ export default memo(
         backgroundColor: interpolateColor(
           progress.value,
           [0, 1],
-          ["transparent", colors.blueSemiTransparent]
-        ),
-        borderColor: interpolateColor(
-          progress.value,
-          [0, 1],
-          [colors.border, "#fff"]
+          [colors.black, colors.blueSemiTransparent]
         ),
       };
     });
+
     return (
-      <AnimatedTouchable
-        onPress={onPress}
-        style={[styles.base, animatedStyle, style]}
-      >
-        <View style={styles.textContainer}>
-          <Text style={[styles.text, textStyle]}>{title}</Text>
-          {isMultiple && <AnimatedCheckbox selected={selected ?? false} />}
-        </View>
-      </AnimatedTouchable>
+      <TouchableOpacity onPress={onPress} style={[styles.base, style]}>
+        <LinearGradient
+          colors={
+            selected
+              ? [colors.darkPurple, colors.lightBlue, colors.aqua]
+              : [colors.border, colors.border]
+          }
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
+          style={styles.linearGradient}
+        >
+          <AnimatedInnerView style={[styles.innerContainer, animatedStyle]}>
+            <Text style={[styles.text, textStyle]}>{title}</Text>
+            {isMultiple && <AnimatedCheckbox selected={selected ?? false} />}
+          </AnimatedInnerView>
+        </LinearGradient>
+      </TouchableOpacity>
     );
   }
 );
@@ -68,14 +73,6 @@ const styles = StyleSheet.create({
   base: {
     width: "100%",
     borderRadius: 20,
-    borderWidth: 1,
-  },
-  textContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: 20,
-    paddingVertical: 25,
   },
   text: {
     flexShrink: 1,
@@ -87,5 +84,18 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     borderRadius: 10,
+  },
+  linearGradient: {
+    borderRadius: 20,
+  },
+  innerContainer: {
+    borderRadius: 19,
+    margin: 1,
+    //backgroundColor: colors.black,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: 20,
+    paddingVertical: 25,
   },
 });

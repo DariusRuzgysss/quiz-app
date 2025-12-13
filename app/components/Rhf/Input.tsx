@@ -21,10 +21,7 @@ const RHFTextInput: React.FC<RHFTextInputProps> = ({ name, ...inputProps }) => {
     <Controller
       control={control}
       name={name}
-      render={({
-        field: { onChange, onBlur, value },
-        fieldState: { error },
-      }) => (
+      render={({ field: { onChange, value }, fieldState: { error } }) => (
         <View style={styles.container}>
           <TextInput
             style={[
@@ -61,11 +58,11 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontFamily: FONTS.RedditSansRegular,
     color: colors.inputText,
+    backgroundColor: colors.dark,
   },
   inputFocused: {
-    borderColor: "#6c5ce7",
     backgroundColor: colors.blueSemiTransparent,
   },
-  errorText: { color: "red", marginTop: 4 },
-  errorBorder: { borderColor: "red" },
+  errorText: { color: colors.error, marginTop: 4 },
+  errorBorder: { borderColor: colors.error },
 });

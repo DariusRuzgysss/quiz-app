@@ -1,10 +1,11 @@
+import { isStringArray } from "@utils/helper";
 import { AnswerItem } from "@utils/types/answer";
-import { QuestionType } from "@utils/types/question";
 import { StoreState } from "@utils/types/store";
 import { create } from "zustand";
 
 const useStore = create<StoreState>()((set, get) => ({
   questions: [],
+  filteredQuestions: [],
   questionsCount: 0,
   currentQuizPage: 0,
   setCurrentQuizPage: (pageNumber: number) =>
@@ -12,43 +13,27 @@ const useStore = create<StoreState>()((set, get) => ({
   setQuestionsCount: (val: number) => set({ questionsCount: val }),
   answers: {},
   setQuestions: (data) => set({ questions: data }),
-  setAnswer: (key: string, value: AnswerItem, type: QuestionType) => {
+  setFilteredQuestions: (data) => set({ filteredQuestions: data }),
+  setAnswer: (key: string, answer: AnswerItem) => {
     const answers = get().answers;
-    // Case 1: value is array → multi-single select
-    if (typeof value === "string") {
-      if (type === "multiple") {
-        const prev: string[] = Array.isArray(answers[key]) ? answers[key] : [];
-
-        let updated = [...prev];
-        const exists = updated.includes(value);
-
-        if (exists) {
-          updated = updated.filter((v) => v !== value);
-        } else {
-          updated.push(value);
+    if (key === "program") {
+      const filtered = get().questions.filter((q) => {
+        if (
+          (isStringArray(answer.value) ? answer.value : []).includes(
+            "quit_alcohol"
+          )
+        ) {
+          return q.key !== "smoke";
         }
-
-        set({
-          answers: {
-            ...answers,
-            [key]: updated,
-          },
-        });
-        return;
-      }
-      set({
-        answers: {
-          ...answers,
-          [key]: [value],
-        },
+        return q.key !== "drink";
       });
-      return;
+      set({ filteredQuestions: filtered });
+      set({ questionsCount: filtered.length - 1 });
     }
-    // Case 2: value is NOT an array
     set({
       answers: {
         ...answers,
-        [key]: value,
+        [key]: answer,
       },
     });
     return;

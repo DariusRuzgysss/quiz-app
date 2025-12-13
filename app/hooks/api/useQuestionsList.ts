@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { getQuizList } from "../../services/api";
 
 export const useQuestionsList = () => {
-  const { setQuestions, setQuestionsCount } = useStore();
+  const { setQuestions, setFilteredQuestions, setQuestionsCount } = useStore();
 
   const query = useQuery<QuestionResponse>({
     queryKey: ["questions-list"],
@@ -18,9 +18,10 @@ export const useQuestionsList = () => {
   useEffect(() => {
     if (isSuccess) {
       setQuestions(data.questions);
+      setFilteredQuestions(data.questions);
       setQuestionsCount(data.questions.length - 1);
     }
-  }, [isSuccess, data, setQuestions, setQuestionsCount]);
+  }, [isSuccess, data, setQuestions, setQuestionsCount, setFilteredQuestions]);
 
   return query;
 };

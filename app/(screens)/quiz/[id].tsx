@@ -1,17 +1,28 @@
 import { Button, CredentialsForm, NameForm, OptionsList } from "@components";
 import useStore from "@hooks/useStore";
 import { colors, FONTS } from "@utils/constants";
-import { AnswerItem } from "@utils/types/answer";
+import { isCredentialsValue, isNameValue, isStringArray } from "@utils/helper";
+import {
+  CredentialsFormType,
+  NameFormType,
+  QuestionTypeToValueMap,
+} from "@utils/types/answer";
+import { QuestionType } from "@utils/types/question";
 import { router, useLocalSearchParams } from "expo-router";
 import React, { useCallback } from "react";
-import { FieldValues } from "react-hook-form";
 import { StyleSheet, Text, View } from "react-native";
 
 const QuizScreen = () => {
-  const { questions, answers, questionsCount, setCurrentQuizPage, setAnswer } =
-    useStore();
+  const {
+    filteredQuestions,
+    answers,
+    questionsCount,
+    setCurrentQuizPage,
+    setAnswer,
+  } = useStore();
   const { id } = useLocalSearchParams();
-  const currentQuestion = questions[+id];
+  const currentQuestion = filteredQuestions[+id];
+  const answerByKey = answers?.[currentQuestion?.key];
 
   const onPressNext = useCallback(() => {
     const nextId = Number(id) + 1;
@@ -27,53 +38,74 @@ const QuizScreen = () => {
     );
   }, [id, questionsCount, setCurrentQuizPage]);
 
-  const onSelect = useCallback(
-    (key: string, value: AnswerItem) => {
-      setAnswer(key, value, currentQuestion.type);
-      if (
-        currentQuestion.type === "single" ||
-        currentQuestion.type === "name" ||
-        currentQuestion.type === "credentials"
-      ) {
-        setTimeout(() => onPressNext(), 700);
-      }
+  const goToNextQuestion = useCallback(() => {
+    if (
+      currentQuestion.type === "single" ||
+      currentQuestion.type === "name" ||
+      currentQuestion.type === "credentials"
+    ) {
+      setTimeout(() => onPressNext(), 300);
+    }
+  }, [currentQuestion.type, onPressNext]);
+
+  const handleSelect = useCallback(
+    <T extends QuestionType>(
+      key: string,
+      value: QuestionTypeToValueMap[T],
+      type: T
+    ) => {
+      setAnswer(key, { value, type });
+      goToNextQuestion();
     },
-    [currentQuestion.type, onPressNext, setAnswer]
+    [goToNextQuestion, setAnswer]
   );
 
   const renderContent = useCallback(() => {
-    switch (currentQuestion.type) {
+    switch (currentQuestion?.type) {
       case "single":
       case "multiple":
         return (
           <OptionsList
             question={currentQuestion}
-            selected={answers?.[currentQuestion.key]}
-            onPress={onSelect}
-            onPressNext={onPressNext}
+            selected={
+              isStringArray(answerByKey?.value) ? answerByKey?.value : []
+            }
+            onPress={(key, value) =>
+              handleSelect(key, value, currentQuestion.type)
+            }
+            onPressNext={
+              currentQuestion.type !== "single" ? onPressNext : undefined
+            }
           />
         );
       case "name":
         return (
           <NameForm
-            value={answers[currentQuestion.key]?.name}
-            onSubmit={(data: FieldValues) =>
-              onSelect(currentQuestion.key, data)
+            value={
+              isNameValue(answerByKey?.value) ? answerByKey?.value.name : ""
+            }
+            onSubmit={(data: NameFormType) =>
+              handleSelect(currentQuestion.key, data, currentQuestion.type)
             }
           />
         );
       case "credentials":
         return (
           <CredentialsForm
-            value={answers[currentQuestion.key]}
-            onSubmit={(data: FieldValues) =>
-              onSelect(currentQuestion.key, data)
+            value={
+              isCredentialsValue(answerByKey?.value)
+                ? answerByKey?.value
+                : undefined
+            }
+            onSubmit={(data: CredentialsFormType) =>
+              handleSelect(currentQuestion.key, data, currentQuestion.type)
             }
           />
         );
       default:
+        return null;
     }
-  }, [answers, currentQuestion, onPressNext, onSelect]);
+  }, [answerByKey, currentQuestion, handleSelect, onPressNext]);
 
   return (
     <View style={styles.container}>

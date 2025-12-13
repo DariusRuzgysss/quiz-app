@@ -1,37 +1,39 @@
 import { Button } from "@components";
 import useStore from "@hooks/useStore";
 import { colors, FONTS } from "@utils/constants";
-import { getAnswerTitles } from "@utils/helper";
-import React, { useCallback } from "react";
+import { getQuestionsByKey } from "@utils/helper";
+import React, { useMemo } from "react";
 import { StyleSheet, Text, View } from "react-native";
 
 const SummaryScreen = () => {
-  const { answers, questions } = useStore();
+  const { answers, filteredQuestions } = useStore();
   const onPressStart = () => {};
   const answerGoal = answers["goal"];
   const answerOtherGoals = answers["other_goals"];
-  const goalKey: string[] = Array.isArray(answerGoal) ? answerGoal : answerGoal;
-  const otherGoalKeys: string[] = Array.isArray(answerOtherGoals)
-    ? answerOtherGoals
-    : answerOtherGoals;
 
-  const goalTitle = useCallback(() => {
-    const goal = questions.find((q) => q.key === "goal");
-    const titles = getAnswerTitles(goalKey, goal);
-    return titles?.map((t) => (
-      <Text
-        key={t.value}
-        style={[styles.subTitle, { fontFamily: FONTS.MerriweatherBold }]}
-      >
-        {t.title}
-      </Text>
-    ));
-  }, [goalKey, questions]);
+  const otherGoalTitles = useMemo(() => {
+    const otherGoalsQuestion = getQuestionsByKey(
+      filteredQuestions,
+      answerOtherGoals,
+      "other_goals"
+    );
+    return (
+      otherGoalsQuestion?.map((op) => (
+        <Text key={op.value} style={styles.subComplimentary}>
+          {op.title}
+        </Text>
+      )) || ""
+    );
+  }, [answerOtherGoals, filteredQuestions]);
 
-  const otherGoalTitles = useCallback(() => {
-    const otherGoal = questions.find((q) => q.key === "other_goals");
-    return getAnswerTitles(otherGoalKeys, otherGoal);
-  }, [otherGoalKeys, questions]);
+  const goalTitle = useMemo(() => {
+    const goalQuestion = getQuestionsByKey(
+      filteredQuestions,
+      answerGoal,
+      "goal"
+    );
+    return goalQuestion?.[0]?.title || "";
+  }, [answerGoal, filteredQuestions]);
 
   return (
     <View style={styles.container}>
@@ -50,15 +52,12 @@ const SummaryScreen = () => {
             <Text
               style={[styles.subTitle, { fontFamily: FONTS.MerriweatherBold }]}
             >
-              {goalTitle()}
+              {goalTitle}
             </Text>
           </View>
           <View style={styles.textContainer}>
             <Text style={styles.title}>Complementary goal:</Text>
-            <Text style={styles.subComplimentary}>
-              Feel more in control of my life
-            </Text>
-            <Text style={styles.subComplimentary}>Feel less anxious</Text>
+            {otherGoalTitles}
           </View>
         </View>
       </View>

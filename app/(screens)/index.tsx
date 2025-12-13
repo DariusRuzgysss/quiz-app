@@ -7,7 +7,7 @@ import { StyleSheet, Text, View } from "react-native";
 
 const HomeScreen = () => {
   const router = useRouter();
-  const { currentQuizPage } = useStore();
+  const { currentQuizPage, questionsCount } = useStore();
 
   return (
     <View style={styles.container}>
@@ -20,12 +20,16 @@ const HomeScreen = () => {
       <Button
         title="Next"
         gradientColors={[colors.darkPurple, colors.lightBlue, colors.aqua]}
-        onPress={() =>
+        onPress={() => {
+          if (currentQuizPage >= questionsCount) {
+            router.push("/quiz/summary");
+            return;
+          }
           router.push({
             pathname: "/quiz/[id]",
             params: { id: currentQuizPage },
-          })
-        }
+          });
+        }}
       />
     </View>
   );

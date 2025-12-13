@@ -17,13 +17,14 @@ export type OptionItem = {
   value: string;
 };
 
-export type QuestionType =
-  | "single"
-  | "multiple"
-  | "weight"
-  | "name"
-  | "age"
-  | "credentials";
+export enum QuestionType {
+  Single = "single",
+  Multiple = "multiple",
+  Weight = "weight",
+  Name = "name",
+  Age = "age",
+  Credentials = "credentials",
+}
 
 type VisibleIf = {
   question: string;

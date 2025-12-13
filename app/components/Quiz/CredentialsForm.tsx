@@ -1,10 +1,10 @@
 import { Button, KeyboardAvoidingWrapper, RHFTextInput } from "@components";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { colors } from "@utils/constants";
-import { AnswerObject } from "@utils/types/answer";
+import { CredentialsFormType } from "@utils/types/answer";
 import React, { memo } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { z } from "zod";
 
 export const validationSchema = z.object({
@@ -17,16 +17,14 @@ export const validationSchema = z.object({
   password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
-type FormValues = z.infer<typeof validationSchema>;
-
 type Props = {
-  onSubmit: (data: FormValues) => void;
-  value: AnswerObject;
+  onSubmit: (data: CredentialsFormType) => void;
+  value?: CredentialsFormType;
 };
 
 export default memo(({ onSubmit, value }: Props) => {
-  const methods = useForm<FormValues>({
-    mode: "onChange",
+  const methods = useForm<CredentialsFormType>({
+    mode: "onSubmit",
     resolver: zodResolver(validationSchema),
     defaultValues: {
       email: value?.email ?? "",
@@ -34,25 +32,38 @@ export default memo(({ onSubmit, value }: Props) => {
     },
   });
 
+  const values = methods.watch();
+
   return (
     <KeyboardAvoidingWrapper>
       <FormProvider {...methods}>
-        <View style={{ flex: 1 }}>
+        <View style={styles.container}>
           <RHFTextInput name="email" placeholder="Enter email" />
 
           <RHFTextInput
             name="password"
-            placeholder="Enter password"
+            placeholder="Password"
             secureTextEntry
           />
         </View>
         <Button
           title="Next"
-          disabled={!methods.formState.isValid}
+          disabled={
+            methods.formState.isSubmitting ||
+            values.email === "" ||
+            values.password === ""
+          }
           gradientColors={[colors.darkPurple, colors.lightBlue, colors.aqua]}
           onPress={methods.handleSubmit(onSubmit)}
         />
       </FormProvider>
     </KeyboardAvoidingWrapper>
   );
+});
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    gap: 12,
+  },
 });
