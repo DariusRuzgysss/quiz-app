@@ -56,7 +56,7 @@ export default memo(
               : [colors.border, colors.border]
           }
           start={{ x: 0, y: 0 }}
-          end={{ x: 0, y: 1 }}
+          end={{ x: 0, y: 0.3 }}
           style={styles.linearGradient}
         >
           <AnimatedInnerView style={[styles.innerContainer, animatedStyle]}>

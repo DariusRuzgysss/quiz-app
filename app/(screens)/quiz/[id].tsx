@@ -1,4 +1,10 @@
-import { Button, CredentialsForm, NameForm, OptionsList } from "@components";
+import {
+  AgePicker,
+  CredentialsForm,
+  NameForm,
+  OptionsList,
+  WeightPicker,
+} from "@components";
 import useStore from "@hooks/useStore";
 import { colors, FONTS } from "@utils/constants";
 import { isCredentialsValue, isNameValue, isStringArray } from "@utils/helper";
@@ -9,7 +15,7 @@ import {
 } from "@utils/types/answer";
 import { QuestionType } from "@utils/types/question";
 import { router, useLocalSearchParams } from "expo-router";
-import React, { useCallback } from "react";
+import React, { useCallback, useMemo } from "react";
 import { StyleSheet, Text, View } from "react-native";
 
 const QuizScreen = () => {
@@ -23,6 +29,10 @@ const QuizScreen = () => {
   const { id } = useLocalSearchParams();
   const currentQuestion = filteredQuestions[+id];
   const answerByKey = answers?.[currentQuestion?.key];
+  const selectedStringArray = useMemo(
+    () => (isStringArray(answerByKey?.value) ? answerByKey?.value : []),
+    [answerByKey?.value]
+  );
 
   const onPressNext = useCallback(() => {
     const nextId = Number(id) + 1;
@@ -61,15 +71,13 @@ const QuizScreen = () => {
   );
 
   const renderContent = useCallback(() => {
-    switch (currentQuestion?.type) {
+    switch (currentQuestion.type) {
       case "single":
       case "multiple":
         return (
           <OptionsList
             question={currentQuestion}
-            selected={
-              isStringArray(answerByKey?.value) ? answerByKey?.value : []
-            }
+            selected={selectedStringArray}
             onPress={(key, value) =>
               handleSelect(key, value, currentQuestion.type)
             }
@@ -102,10 +110,40 @@ const QuizScreen = () => {
             }
           />
         );
+      case "age":
+        return (
+          <AgePicker
+            onChange={(value) =>
+              handleSelect(
+                currentQuestion.key,
+                [value.toString()],
+                currentQuestion.type
+              )
+            }
+            selected={
+              selectedStringArray[0] ? Number(selectedStringArray[0]) : 0
+            }
+          />
+        );
+      case "weight":
+        return (
+          <WeightPicker
+            onChange={(value) =>
+              handleSelect(currentQuestion.key, value, currentQuestion.type)
+            }
+            selected={selectedStringArray}
+          />
+        );
       default:
         return null;
     }
-  }, [answerByKey, currentQuestion, handleSelect, onPressNext]);
+  }, [
+    answerByKey?.value,
+    currentQuestion,
+    handleSelect,
+    onPressNext,
+    selectedStringArray,
+  ]);
 
   return (
     <View style={styles.container}>
@@ -114,13 +152,6 @@ const QuizScreen = () => {
         <Text style={styles.title}>{currentQuestion.title}</Text>
       </View>
       {renderContent()}
-      {currentQuestion.type !== "single" && (
-        <Button
-          title="Next"
-          gradientColors={[colors.darkPurple, colors.lightBlue, colors.aqua]}
-          onPress={onPressNext}
-        />
-      )}
     </View>
   );
 };
