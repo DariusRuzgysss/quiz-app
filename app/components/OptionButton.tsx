@@ -1,6 +1,5 @@
-import { AnimatedCheckbox } from "@components";
+import { AnimatedCheckbox, GradientBorder } from "@components";
 import { colors, FONTS } from "@utils/constants";
-import { LinearGradient } from "expo-linear-gradient";
 import React, { memo, useEffect } from "react";
 import {
   StyleProp,
@@ -25,6 +24,7 @@ type Props = {
   isMultiple?: boolean;
   style?: StyleProp<ViewStyle>;
   textStyle?: TextStyle;
+  disabled?: boolean;
 };
 
 const AnimatedInnerView = Animated.createAnimatedComponent(View);
@@ -46,24 +46,20 @@ export default memo(
         ),
       };
     });
-
     return (
       <TouchableOpacity onPress={onPress} style={[styles.base, style]}>
-        <LinearGradient
+        <GradientBorder
           colors={
             selected
               ? [colors.darkPurple, colors.lightBlue, colors.aqua]
               : [colors.border, colors.border]
           }
-          start={{ x: 0, y: 0 }}
-          end={{ x: 0, y: 0.3 }}
-          style={styles.linearGradient}
         >
           <AnimatedInnerView style={[styles.innerContainer, animatedStyle]}>
             <Text style={[styles.text, textStyle]}>{title}</Text>
             {isMultiple && <AnimatedCheckbox selected={selected ?? false} />}
           </AnimatedInnerView>
-        </LinearGradient>
+        </GradientBorder>
       </TouchableOpacity>
     );
   }
@@ -85,13 +81,9 @@ const styles = StyleSheet.create({
     height: 24,
     borderRadius: 10,
   },
-  linearGradient: {
-    borderRadius: 20,
-  },
   innerContainer: {
     borderRadius: 19,
     margin: 1,
-    //backgroundColor: colors.black,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",

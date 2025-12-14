@@ -1,3 +1,5 @@
+import { CredentialsFormType, NameFormType } from "./answer";
+
 export type QuestionResponse = {
   name: string;
   questions: Question[];
@@ -25,6 +27,15 @@ export enum QuestionType {
   Age = "age",
   Credentials = "credentials",
 }
+
+export type QuestionTypeToValueMap = {
+  [QuestionType.Age]: string[];
+  [QuestionType.Credentials]: CredentialsFormType;
+  [QuestionType.Multiple]: string[];
+  [QuestionType.Name]: NameFormType;
+  [QuestionType.Single]: string[];
+  [QuestionType.Weight]: string[];
+};
 
 type VisibleIf = {
   question: string;

@@ -1,5 +1,6 @@
+import { GradientBorder } from "@components";
 import { colors, FONTS } from "@utils/constants";
-import React, { useState } from "react";
+import React, { memo, useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import {
   StyleSheet,
@@ -13,7 +14,7 @@ interface RHFTextInputProps extends TextInputProps {
   name: string;
 }
 
-const RHFTextInput: React.FC<RHFTextInputProps> = ({ name, ...inputProps }) => {
+export default memo<RHFTextInputProps>(({ name, ...inputProps }) => {
   const { control } = useFormContext();
   const [isFocused, setIsFocused] = useState(false);
 
@@ -23,27 +24,30 @@ const RHFTextInput: React.FC<RHFTextInputProps> = ({ name, ...inputProps }) => {
       name={name}
       render={({ field: { onChange, value }, fieldState: { error } }) => (
         <View style={styles.container}>
-          <TextInput
-            style={[
-              styles.input,
-              error && styles.errorBorder,
-              isFocused && styles.inputFocused,
-            ]}
-            value={value}
-            placeholderTextColor={colors.inputText}
-            onChangeText={onChange}
-            onFocus={() => setIsFocused(true)}
-            onBlur={() => setIsFocused(false)}
-            {...inputProps}
-          />
+          <GradientBorder
+            colors={
+              isFocused
+                ? [colors.darkPurple, colors.lightBlue, colors.aqua]
+                : [colors.border, colors.border]
+            }
+            style={{ borderRadius: 24 }}
+          >
+            <TextInput
+              style={[styles.input, isFocused && styles.inputFocused]}
+              value={value}
+              placeholderTextColor={colors.inputText}
+              onChangeText={onChange}
+              onFocus={() => setIsFocused(true)}
+              onBlur={() => setIsFocused(false)}
+              {...inputProps}
+            />
+          </GradientBorder>
           {error && <Text style={styles.errorText}>{error.message}</Text>}
         </View>
       )}
     />
   );
-};
-
-export default RHFTextInput;
+});
 
 const styles = StyleSheet.create({
   container: {
@@ -52,7 +56,8 @@ const styles = StyleSheet.create({
   input: {
     borderWidth: 1,
     borderColor: colors.border,
-    borderRadius: 24,
+    borderRadius: 23,
+    margin: 1,
     paddingHorizontal: 20,
     paddingVertical: 26,
     fontSize: 15,
@@ -64,5 +69,4 @@ const styles = StyleSheet.create({
     backgroundColor: colors.blueSemiTransparent,
   },
   errorText: { color: colors.error, marginTop: 4 },
-  errorBorder: { borderColor: colors.error },
 });

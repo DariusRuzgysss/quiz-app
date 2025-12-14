@@ -1,4 +1,4 @@
-import { QuestionType } from "./question";
+import { QuestionType, QuestionTypeToValueMap } from "./question";
 
 export type Answer = {
   [key: string]: AnswerItem;
@@ -16,13 +16,4 @@ export type CredentialsFormType = {
 
 export type NameFormType = {
   name: string;
-};
-
-export type QuestionTypeToValueMap = {
-  [QuestionType.Age]: string[];
-  [QuestionType.Credentials]: CredentialsFormType;
-  [QuestionType.Multiple]: string[];
-  [QuestionType.Name]: NameFormType;
-  [QuestionType.Single]: string[];
-  [QuestionType.Weight]: string[];
 };

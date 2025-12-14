@@ -27,7 +27,7 @@ const Navigation = () => {
     <Stack
       screenOptions={{
         headerShown: false,
-        contentStyle: { backgroundColor: colors.dark, padding: 20 },
+        contentStyle: { backgroundColor: colors.dark },
       }}
     >
       <Stack.Screen name="(screens)/index" />

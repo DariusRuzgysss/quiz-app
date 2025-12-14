@@ -1,22 +1,22 @@
+import { Button, PickerOverlay } from "@components";
 import WheelPicker, {
   type PickerItem,
   useOnPickerValueChangedEffect,
   usePickerControl,
   withPickerControl,
 } from "@quidone/react-native-wheel-picker";
-import { colors, FONTS } from "@utils/constants";
+import { colors, FONTS, PICKER_ITEM_HEIGHT } from "@utils/constants";
+import { generatePickerData } from "@utils/helper";
 import React, { memo } from "react";
 import { StyleSheet, View } from "react-native";
 
 type Props = {
   onChange: (value: string[]) => void;
   selected?: string[];
+  onPressNext?: () => void;
 };
 
-const data = [...Array(100).keys()].map((index) => ({
-  value: index.toString(),
-  label: index.toString(),
-}));
+const data = generatePickerData(300);
 
 const weightLabel = [
   {
@@ -33,7 +33,7 @@ type ControlPickersMap = {
   value4: { item: PickerItem<string> };
 };
 
-export default memo(({ onChange, selected }: Props) => {
+export default memo(({ onChange, selected, onPressNext }: Props) => {
   const pickerControl = usePickerControl<ControlPickersMap>();
 
   useOnPickerValueChangedEffect(pickerControl, (event) => {
@@ -44,9 +44,12 @@ export default memo(({ onChange, selected }: Props) => {
     ]);
   });
   return (
-    <View style={styles.container}>
-      <View style={styles.container}>
-        <View style={styles.overlay} />
+    <View style={styles.base}>
+      <View style={styles.pickerContainer}>
+        <PickerOverlay
+          colorsValue={[colors.darkPurple, colors.lightBlue, colors.aqua]}
+          style={styles.overlay}
+        />
         <ControlPicker
           control={pickerControl}
           pickerName={"value1"}
@@ -54,6 +57,7 @@ export default memo(({ onChange, selected }: Props) => {
           value={selected ? selected[0] : "0"}
           enableScrollByTapOnItem={true}
           itemTextStyle={styles.text}
+          itemHeight={PICKER_ITEM_HEIGHT}
         />
         <ControlPicker
           control={pickerControl}
@@ -62,6 +66,7 @@ export default memo(({ onChange, selected }: Props) => {
           value={","}
           enableScrollByTapOnItem={false}
           itemTextStyle={styles.text}
+          itemHeight={PICKER_ITEM_HEIGHT}
         />
         <ControlPicker
           control={pickerControl}
@@ -70,6 +75,7 @@ export default memo(({ onChange, selected }: Props) => {
           value={selected ? selected[1] : "0"}
           enableScrollByTapOnItem={true}
           itemTextStyle={styles.text}
+          itemHeight={PICKER_ITEM_HEIGHT}
         />
         <ControlPicker
           control={pickerControl}
@@ -78,14 +84,25 @@ export default memo(({ onChange, selected }: Props) => {
           value={selected ? selected[2] : "lb"}
           enableScrollByTapOnItem={false}
           itemTextStyle={styles.text}
+          itemHeight={PICKER_ITEM_HEIGHT}
         />
       </View>
+      {onPressNext && (
+        <Button
+          title="Next"
+          gradientColors={[colors.darkPurple, colors.lightBlue, colors.aqua]}
+          onPress={onPressNext}
+        />
+      )}
     </View>
   );
 });
 
 const styles = StyleSheet.create({
-  container: {
+  base: {
+    flex: 1,
+  },
+  pickerContainer: {
     flex: 1,
     flexDirection: "row",
     alignItems: "center",
@@ -102,8 +119,5 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: "100%",
     height: 56,
-    zIndex: -1,
-    backgroundColor: colors.blueSemiTransparent,
-    borderRadius: 20,
   },
 });

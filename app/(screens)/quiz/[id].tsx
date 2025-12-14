@@ -8,12 +8,8 @@ import {
 import useStore from "@hooks/useStore";
 import { colors, FONTS } from "@utils/constants";
 import { isCredentialsValue, isNameValue, isStringArray } from "@utils/helper";
-import {
-  CredentialsFormType,
-  NameFormType,
-  QuestionTypeToValueMap,
-} from "@utils/types/answer";
-import { QuestionType } from "@utils/types/question";
+import { CredentialsFormType, NameFormType } from "@utils/types/answer";
+import { QuestionType, QuestionTypeToValueMap } from "@utils/types/question";
 import { router, useLocalSearchParams } from "expo-router";
 import React, { useCallback, useMemo } from "react";
 import { StyleSheet, Text, View } from "react-native";
@@ -50,11 +46,11 @@ const QuizScreen = () => {
 
   const goToNextQuestion = useCallback(() => {
     if (
-      currentQuestion.type === "single" ||
-      currentQuestion.type === "name" ||
-      currentQuestion.type === "credentials"
+      currentQuestion.type === QuestionType.Single ||
+      currentQuestion.type === QuestionType.Name ||
+      currentQuestion.type === QuestionType.Credentials
     ) {
-      setTimeout(() => onPressNext(), 300);
+      setTimeout(() => onPressNext(), 250);
     }
   }, [currentQuestion.type, onPressNext]);
 
@@ -72,8 +68,8 @@ const QuizScreen = () => {
 
   const renderContent = useCallback(() => {
     switch (currentQuestion.type) {
-      case "single":
-      case "multiple":
+      case QuestionType.Single:
+      case QuestionType.Multiple:
         return (
           <OptionsList
             question={currentQuestion}
@@ -82,11 +78,13 @@ const QuizScreen = () => {
               handleSelect(key, value, currentQuestion.type)
             }
             onPressNext={
-              currentQuestion.type !== "single" ? onPressNext : undefined
+              currentQuestion.type !== QuestionType.Single
+                ? onPressNext
+                : undefined
             }
           />
         );
-      case "name":
+      case QuestionType.Name:
         return (
           <NameForm
             value={
@@ -97,7 +95,7 @@ const QuizScreen = () => {
             }
           />
         );
-      case "credentials":
+      case QuestionType.Credentials:
         return (
           <CredentialsForm
             value={
@@ -110,28 +108,24 @@ const QuizScreen = () => {
             }
           />
         );
-      case "age":
+      case QuestionType.Age:
         return (
           <AgePicker
             onChange={(value) =>
-              handleSelect(
-                currentQuestion.key,
-                [value.toString()],
-                currentQuestion.type
-              )
+              handleSelect(currentQuestion.key, [value], currentQuestion.type)
             }
-            selected={
-              selectedStringArray[0] ? Number(selectedStringArray[0]) : 0
-            }
+            selected={selectedStringArray[0]}
+            onPressNext={onPressNext}
           />
         );
-      case "weight":
+      case QuestionType.Weight:
         return (
           <WeightPicker
             onChange={(value) =>
               handleSelect(currentQuestion.key, value, currentQuestion.type)
             }
             selected={selectedStringArray}
+            onPressNext={onPressNext}
           />
         );
       default:

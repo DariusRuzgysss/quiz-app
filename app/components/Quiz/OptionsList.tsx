@@ -57,6 +57,7 @@ export default memo(
             title="Next"
             gradientColors={[colors.darkPurple, colors.lightBlue, colors.aqua]}
             onPress={onPressNext}
+            disabled={!selected.length}
           />
         )}
       </View>

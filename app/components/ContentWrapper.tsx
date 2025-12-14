@@ -1,17 +1,34 @@
-import React, { memo } from "react";
-import { Image, StyleSheet } from "react-native";
+import { StatusBar } from "@components";
+import useStore from "@hooks/useStore";
+import { isProgramQuitAlcohol } from "@utils/helper";
+import { usePathname } from "expo-router";
+import React, { memo, useMemo } from "react";
+import { Image, StyleSheet, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
+import BgNoAlcohol from "../../assets/images/BG Screen no alcohol.png";
+import BgRegular from "../../assets/images/BG-Screen.png";
 
 export default memo(({ children }: { children: React.ReactNode }) => {
+  const { answers } = useStore();
+  const pathname = usePathname();
+
+  const showNoAlcoholBg = useMemo(() => {
+    return (
+      isProgramQuitAlcohol(answers["program"]) &&
+      pathname.includes("/quiz/summary")
+    );
+  }, [answers, pathname]);
+
   return (
     <GestureHandlerRootView style={styles.container}>
+      <StatusBar />
       <SafeAreaView style={styles.container}>
         <Image
-          source={require("../../assets/images/BG Screen.png")}
+          source={showNoAlcoholBg ? BgNoAlcohol : BgRegular}
           style={styles.background}
         />
-        {children}
+        <View style={styles.content}>{children}</View>
       </SafeAreaView>
     </GestureHandlerRootView>
   );
@@ -24,5 +41,12 @@ const styles = StyleSheet.create({
   background: {
     ...StyleSheet.absoluteFillObject,
     top: -20,
+    width: "100%",
+    height: "100%",
+  },
+  content: {
+    flex: 1,
+    padding: 20,
+    paddingTop: 10,
   },
 });

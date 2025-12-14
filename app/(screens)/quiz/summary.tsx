@@ -1,7 +1,7 @@
 import { Button } from "@components";
 import useStore from "@hooks/useStore";
 import { colors, FONTS } from "@utils/constants";
-import { getQuestionsByKey } from "@utils/helper";
+import { getQuestionsByKey, isProgramQuitAlcohol } from "@utils/helper";
 import React, { useMemo } from "react";
 import { StyleSheet, Text, View } from "react-native";
 
@@ -10,6 +10,10 @@ const SummaryScreen = () => {
   const onPressStart = () => {};
   const answerGoal = answers["goal"];
   const answerOtherGoals = answers["other_goals"];
+
+  const isProgramNoAlcohol = useMemo(() => {
+    return isProgramQuitAlcohol(answers["program"]);
+  }, [answers]);
 
   const otherGoalTitles = useMemo(() => {
     const otherGoalsQuestion = getQuestionsByKey(
@@ -61,7 +65,13 @@ const SummaryScreen = () => {
           </View>
         </View>
       </View>
-      <Button title="Start my journey" onPress={onPressStart} />
+      <Button
+        title="Start my journey"
+        onPress={onPressStart}
+        style={{
+          backgroundColor: colors[isProgramNoAlcohol ? "blueGreen" : "blue"],
+        }}
+      />
     </View>
   );
 };

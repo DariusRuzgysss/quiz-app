@@ -12,6 +12,7 @@ export const colors = {
   black: "#05011b",
   inputText: "#BEC4D2",
   error: "#FF6B6B",
+  blueGreen: "#158095",
 };
 
 export const FONTS = {
@@ -40,3 +41,5 @@ export const FONTS = {
   RedditSansSemiBold: "RedditSans-SemiBold",
   RedditSansSemiBoldItalic: "RedditSans-SemiBoldItalic",
 };
+
+export const PICKER_ITEM_HEIGHT = 65;

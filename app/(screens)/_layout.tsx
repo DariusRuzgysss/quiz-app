@@ -1,12 +1,15 @@
 import { ContentWrapper } from "@components";
-import { Slot } from "expo-router";
+import { ErrorBoundary, Slot } from "expo-router";
+import { Try } from "expo-router/build/views/Try";
 import React from "react";
 
 const Layout = () => {
   return (
-    <ContentWrapper>
-      <Slot />
-    </ContentWrapper>
+    <Try catch={ErrorBoundary}>
+      <ContentWrapper>
+        <Slot />
+      </ContentWrapper>
+    </Try>
   );
 };
 

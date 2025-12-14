@@ -17,3 +17,15 @@ export const getQuestionsByKey = (
     (isStringArray(answer.value) ? answer.value : []).includes(op.value)
   );
 };
+
+export const generatePickerData = (max: number) => {
+  return [...Array(max).keys()].map((index) => ({
+    value: index.toString(),
+    label: index.toString(),
+  }));
+};
+
+export const isProgramQuitAlcohol = (answer: AnswerItem<QuestionType>) => {
+  const program = isStringArray(answer?.value) ? answer.value : [];
+  return program.includes("quit_alcohol");
+};
