@@ -1,18 +1,25 @@
+import { router, useLocalSearchParams } from "expo-router";
+import React, { useCallback, useMemo } from "react";
+import { StyleSheet, Text, View } from "react-native";
 import {
   AgePicker,
   CredentialsForm,
   NameForm,
   OptionsList,
   WeightPicker,
-} from "@components";
-import useStore from "@hooks/useStore";
-import { colors, FONTS } from "@utils/constants";
-import { isCredentialsValue, isNameValue, isStringArray } from "@utils/helper";
-import { CredentialsFormType, NameFormType } from "@utils/types/answer";
-import { QuestionType, QuestionTypeToValueMap } from "@utils/types/question";
-import { router, useLocalSearchParams } from "expo-router";
-import React, { useCallback, useMemo } from "react";
-import { StyleSheet, Text, View } from "react-native";
+} from "../../../components";
+import useStore from "../../../hooks/useStore";
+import { colors, FONTS } from "../../../utils/constants";
+import {
+  isCredentialsValue,
+  isNameValue,
+  isStringArray,
+} from "../../../utils/helper";
+import { CredentialsFormType, NameFormType } from "../../../utils/types/answer";
+import {
+  QuestionType,
+  QuestionTypeToValueMap,
+} from "../../../utils/types/question";
 
 const QuizScreen = () => {
   const {

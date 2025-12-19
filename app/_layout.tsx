@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import Navigation from "./navigation/navigation";
+import Navigation from "../navigation/navigation";
 
 export default function RootLayout() {
   const queryClient = new QueryClient();

@@ -1,7 +1,7 @@
-import { AnimatedSteppe, CustomHeader } from "@components";
-import useStore from "@hooks/useStore";
 import { Slot, useRouter } from "expo-router";
 import React from "react";
+import { AnimatedSteppe, CustomHeader } from "../../../components";
+import useStore from "../../../hooks/useStore";
 
 const QuizLayout = () => {
   const { questionsCount, currentQuizPage, setCurrentQuizPage } = useStore();

@@ -1,9 +1,9 @@
-import { Button } from "@components";
-import useStore from "@hooks/useStore";
-import { colors, FONTS } from "@utils/constants";
-import { getQuestionsByKey, isProgramQuitAlcohol } from "@utils/helper";
 import React, { useMemo } from "react";
 import { StyleSheet, Text, View } from "react-native";
+import { Button } from "../../../components";
+import useStore from "../../../hooks/useStore";
+import { colors, FONTS } from "../../../utils/constants";
+import { getQuestionsByKey, isProgramQuitAlcohol } from "../../../utils/helper";
 
 const SummaryScreen = () => {
   const { answers, filteredQuestions } = useStore();
